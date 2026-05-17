@@ -12,7 +12,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 DATA = Path("/tmp/airdrie-karto-audit/api/records/all")
 KARTO_NS_URL = "https://main.karto.helpseeker.org/compose/ns/CoA"
-REQUEST_PAGE = f"{KARTO_NS_URL}/pages/437118446045495297"
+REQUEST_PAGE = "/airdrie-karto-client-portal/request-workflow/"
+REQUEST_API_ENDPOINT = "https://main.karto.helpseeker.org/api/compose/namespace/437118445986185217/module/437118446006632449/record/"
 TICKET_LIST_PAGE = f"{KARTO_NS_URL}/pages/437118446039072769"
 DASHBOARD_LIST_PAGE = f"{KARTO_NS_URL}/pages/437118446032453633"
 INSIGHT_LIST_PAGE = f"{KARTO_NS_URL}/pages/437535446718873601"
@@ -189,7 +190,7 @@ def hero(title: str, subtitle: str, panel_title: str, panel_text: str, panel_sma
       <h1>{esc(title)}</h1>
       <p class="hero-copy">{esc(subtitle)}</p>
       <div class="actions">
-        <a class="btn primary" href="{REQUEST_PAGE}" target="_blank" rel="noopener">Open Request Workflow</a>
+        <a class="btn primary" href="{REQUEST_PAGE}">Open Request Workflow</a>
         <a class="btn ghost" href="delivery-library/">View Delivery Library</a>
       </div>
     </div>
@@ -328,7 +329,7 @@ def service_plan(ctx) -> str:
     <a class="card" href="delivery-library/"><p class="kicker">1</p><h3>Read shipped work</h3><p>Start with the polished web reports and the protected Karto attachment archive.</p><div class="tags"><span class="tag">Reports</span><span class="tag">Word/PDF files</span></div></a>
     <a class="card" href="subscription/"><p class="kicker">2</p><h3>Check ticket use</h3><p>Review quota, cumulative hours, file volume, and likely internal capacity saved.</p><div class="tags"><span class="tag">Quota</span><span class="tag">Hours saved</span></div></a>
     <a class="card" href="next-requests/"><p class="kicker">3</p><h3>Pick the next request</h3><p>Use the recommended ticket list to convert known pressure points into scoped work.</p><div class="tags"><span class="tag">Pipeline</span><span class="tag">Council-ready</span></div></a>
-    <a class="card" href="{REQUEST_PAGE}" target="_blank" rel="noopener"><p class="kicker">4</p><h3>Submit in Karto</h3><p>Open the native request workflow so the existing notifications and record tracking remain intact.</p><div class="tags"><span class="tag">Workflow</span><span class="tag">Notifications</span></div></a>
+    <a class="card" href="{REQUEST_PAGE}"><p class="kicker">4</p><h3>Submit a request</h3><p>Use the polished intake form. It writes to the same backend ticket module so tracking remains intact.</p><div class="tags"><span class="tag">Workflow</span><span class="tag">Notifications</span></div></a>
   </div>
 </section>
 <p class="source-note">Selected public context links: <a href="https://www.cmhc-schl.gc.ca/media-newsroom/news-releases/2024/helping-build-more-homes-faster-airdrie" target="_blank" rel="noopener">CMHC Airdrie HAF announcement</a>; <a href="https://assets.cmhc-schl.gc.ca/sites/cmhc/professional/project-funding-and-mortgage-financing/funding-programs/all-funding-programs/housing-accelerator-fund/action-plan-summaries/haf-action-plan-summary-airdrie-en.pdf" target="_blank" rel="noopener">CMHC action plan summary</a>; <a href="https://www.airdrie.ca/index.cfm?serviceID=2578" target="_blank" rel="noopener">Airdrie four-homes-per-lot consultation page</a>.</p>
@@ -359,21 +360,125 @@ def delivery_library(ctx) -> str:
 
 
 def request_workflow(ctx) -> str:
+    topic_options = [
+        ("Housing Affordability", "Housing_Affordability"),
+        ("Community Engagement", "Community_Engagement"),
+        ("Data Analysis", "Data_Analysis"),
+        ("Downtown Revitalization", "Downtown Revitalization"),
+        ("Parking Policy", "Parking_Policy"),
+        ("Land Use Designation", "Land_Use_Designation"),
+        ("Residential Density", "Residential_Density"),
+        ("Homelessness Strategy", "Homelessness_Strategy"),
+        ("Economic Diversification", "Economic_Diversification"),
+        ("Servicing Costs", "Servicing_Costs"),
+        ("Water Management", "Water_Management"),
+        ("Intermunicipal Collaboration", "Intermunicipal_Collaboration"),
+        ("Public Transit", "Public_Transit"),
+        ("Other", "Other"),
+    ]
+    output_options = [
+        ("Briefing note / Word", "docx"),
+        ("Spreadsheet / Excel", "excel"),
+        ("Web report", "website"),
+        ("Dashboard", "google_sheet"),
+        ("Slide deck", "ppt"),
+        ("PDF", "pdf"),
+        ("Data collection form", "google_form"),
+        ("Other", "other"),
+    ]
+    topics = "\n".join(
+        f'<label class="check-tile"><input type="checkbox" name="ticket_topic" value="{esc(value)}"><span>{esc(label)}</span></label>'
+        for label, value in topic_options
+    )
+    outputs = "\n".join(
+        f'<label class="check-tile"><input type="checkbox" name="output_format" value="{esc(value)}"><span>{esc(label)}</span></label>'
+        for label, value in output_options
+    )
     body = f"""<section class="hero">
   <div class="hero-inner">
-    <div><p class="eyebrow">Request Workflow</p><h1>Submit and track work through Karto</h1><p class="hero-copy">Airdrie already has enabled notification workflows. The clean page should route staff into the native Karto ticket form instead of replacing the workflow logic.</p><div class="actions"><a class="btn primary" href="{REQUEST_PAGE}" target="_blank" rel="noopener">Open Request Workflow</a><a class="btn ghost" href="{TICKET_LIST_PAGE}" target="_blank" rel="noopener">Open Ticket Records</a></div></div>
-    <aside class="hero-panel"><h2>Workflow preserved</h2><p>Two enabled workflow definitions exist in the namespace. They should remain attached to the record workflow so new submissions and status updates continue to notify the right people.</p></aside>
+    <div><p class="eyebrow">Request Workflow</p><h1>Start a new Karto request</h1><p class="hero-copy">Use this polished intake instead of the raw Compose form. It writes into the same Airdrie ticket module so the backend workflow, status tracking, and audit trail stay intact.</p></div>
+    <aside class="hero-panel"><h2>Compose stays behind the scenes</h2><p>The client-facing layer is HTML. The Compose ticket module remains the system of record and notification middle layer.</p><p class="small">Staff must be signed into Karto for submission.</p></aside>
   </div>
 </section>
 <section class="section">
+  <form class="intake-form" id="ticket-intake" data-endpoint="{REQUEST_API_ENDPOINT}" novalidate>
+    <div class="form-head">
+      <div><p class="section-label">New request</p><h2>Tell us what decision this should support</h2></div>
+      <p class="lede">Short, specific requests move fastest. Files can be attached after the ticket is created, using the protected ticket record.</p>
+    </div>
+    <div class="form-grid two">
+      <label class="field wide">Ticket title
+        <input name="ticket_name" required maxlength="180" placeholder="Example: HAF milestone and amendment risk tracker">
+      </label>
+      <label class="field">Your name
+        <input name="submitter_name" autocomplete="name" placeholder="Name">
+      </label>
+      <label class="field">Your email
+        <input name="submitter_email" type="email" autocomplete="email" placeholder="name@airdrie.ca">
+      </label>
+      <label class="field">Requested completion date
+        <input name="required_completion_date" type="date">
+      </label>
+      <label class="field">Urgency
+        <select name="urgency">
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="high">High</option>
+        </select>
+      </label>
+      <label class="field wide">Geographic scope
+        <input name="geographic_scope" placeholder="City of Airdrie, Calgary region, Alberta comparators, etc.">
+      </label>
+      <label class="field wide">Objective
+        <input name="objective" placeholder="What decision, meeting, policy, or operational question should this support?">
+      </label>
+      <label class="field wide">Request details
+        <textarea name="description_plain" required rows="7" placeholder="Describe the question, audience, expected use, known context, and any constraints."></textarea>
+      </label>
+      <label class="field wide">Source files or links to add after submission
+        <textarea name="source_notes" rows="4" placeholder="List file names, SharePoint links, council reports, spreadsheets, prior work, or people to contact."></textarea>
+      </label>
+    </div>
+    <div class="form-section">
+      <h3>Topics</h3>
+      <div class="choice-grid">{topics}</div>
+    </div>
+    <div class="form-section">
+      <h3>Expected output</h3>
+      <div class="choice-grid">{outputs}</div>
+    </div>
+    <div class="form-grid three compact">
+      <label class="field">Estimated staff hours saved
+        <input name="est_hrs" type="number" min="0" max="100" step="1" placeholder="12">
+      </label>
+      <label class="field">Expected content volume
+        <input name="content_volume" type="number" min="0" max="100" step="1" placeholder="10">
+      </label>
+      <label class="field">Privacy
+        <select name="private_ticket">
+          <option value="0">Share with Airdrie team</option>
+          <option value="1">Private to requester</option>
+        </select>
+      </label>
+      <label class="check-line"><input type="checkbox" name="brand" value="1" checked><span>Use City of Airdrie branding where possible</span></label>
+    </div>
+    <div class="form-actions">
+      <button class="btn primary" type="submit">Submit ticket</button>
+      <button class="btn light" type="reset">Clear</button>
+      <span class="form-status" id="ticket-status" role="status" aria-live="polite"></span>
+    </div>
+    <div class="notice compact-note">This form creates the ticket record only. Attachments stay in protected Karto records; after submission, open the ticket archive only if you need to add confidential files.</div>
+  </form>
+</section>
+<section class="section">
   <div class="grid three">
-    <div class="card"><p class="kicker">Before submitting</p><h3>Frame the question</h3><p>Use a decision question, not just a topic. Good requests ask what council, ELT, or staff need to decide next.</p><div class="tags"><span class="tag">Decision</span><span class="tag">Audience</span></div></div>
-    <div class="card"><p class="kicker">Attach context</p><h3>Add source files</h3><p>Upload reports, agendas, spreadsheets, presentations, or examples directly into the protected Karto workflow.</p><div class="tags"><span class="tag">Files</span><span class="tag">Evidence</span></div></div>
-    <div class="card"><p class="kicker">Pick output</p><h3>Name the usable artifact</h3><p>Briefing note, technical report, dashboard, comparator table, council summary, presentation, or data collection form.</p><div class="tags"><span class="tag">Format</span><span class="tag">Deadline</span></div></div>
+    <div class="card"><p class="kicker">1</p><h3>Submit here</h3><p>The HTML intake writes into the same Compose ticket module used by the old form.</p></div>
+    <div class="card"><p class="kicker">2</p><h3>Workflow fires</h3><p>The existing after-create notification workflow remains attached to the ticket module.</p></div>
+    <div class="card"><p class="kicker">3</p><h3>Attach files safely</h3><p>Confidential source files remain in Karto's protected record layer rather than the public static site.</p></div>
   </div>
 </section>
 """
-    return layout("sub", "Request Workflow", body)
+    return layout("sub", "Request Workflow", body, '<script src="../portal-assets/request-intake.js"></script>')
 
 
 def subscription(ctx) -> str:
@@ -532,7 +637,7 @@ def next_requests_page(ctx) -> str:
     )
     body = f"""<section class="hero">
   <div class="hero-inner">
-    <div><p class="eyebrow">Next Requests</p><h1>Ticket ideas based on Airdrie's actual demand pattern</h1><p class="hero-copy">These are scoped to the topics already appearing in Airdrie's tickets and public policy context: housing delivery, HAF, STRs, downtown, grant reporting, engagement, and regional pressure.</p><div class="actions"><a class="btn primary" href="{REQUEST_PAGE}" target="_blank" rel="noopener">Order in Karto</a></div></div>
+    <div><p class="eyebrow">Next Requests</p><h1>Ticket ideas based on Airdrie's actual demand pattern</h1><p class="hero-copy">These are scoped to the topics already appearing in Airdrie's tickets and public policy context: housing delivery, HAF, STRs, downtown, grant reporting, engagement, and regional pressure.</p><div class="actions"><a class="btn primary" href="{REQUEST_PAGE}">Order in Karto</a></div></div>
     <aside class="hero-panel"><h2>How to use this</h2><p>Pick one card, paste the title into the Karto request workflow, and attach any current council package or staff report that should anchor the work.</p></aside>
   </div>
 </section>
