@@ -87,7 +87,7 @@
     addValue(
       values,
       "status_notes",
-      `Submitted via Airdrie client-facing HTML intake on ${today}.${submitter ? ` Submitter: ${submitter}.` : ""} Source attachments remain in protected Karto records.`
+      `Submitted via Airdrie request form on ${today}.${submitter ? ` Submitter: ${submitter}.` : ""} Source attachments remain in protected Karto records.`
     );
 
     return { values };
@@ -103,7 +103,7 @@
     const endpoint = form.dataset.endpoint;
     const submit = form.querySelector('button[type="submit"]');
     submit.disabled = true;
-    setStatus("Submitting to Karto...", "info");
+    setStatus("Submitting request...", "info");
 
     try {
       const response = await fetch(endpoint, {
@@ -118,13 +118,13 @@
         throw new Error(message);
       }
       const recordID = data.response && data.response.recordID ? data.response.recordID : "";
-      setStatus(recordID ? `Submitted. Ticket record ${recordID} created.` : "Submitted. Ticket record created.", "success");
+      setStatus(recordID ? `Submitted. Request record ${recordID} created.` : "Submitted. Request record created.", "success");
       form.reset();
       const brand = form.elements.brand;
       if (brand) brand.checked = true;
     } catch (error) {
       setStatus(
-        `Could not submit from this page: ${error.message}. Confirm you are signed into Karto, then retry. If it still fails, use the protected Karto record layer for attachments and admin entry.`,
+        `Could not submit from this page: ${error.message}. Confirm you are signed into Karto, then retry. If it still fails, save the request details and add them through the secure ticket workspace.`,
         "error"
       );
     } finally {

@@ -3,31 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Subscription - City of Airdrie Karto</title>
+<title>Ticket Allowance - City of Airdrie Karto</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230B1F33'/%3E%3Ccircle cx='11' cy='11' r='5' fill='%234FD1C5'/%3E%3Ccircle cx='21' cy='11' r='5' fill='%230FB9B1'/%3E%3Ccircle cx='11' cy='21' r='5' fill='%230FB9B1'/%3E%3Ccircle cx='21' cy='21' r='5' fill='%234FD1C5'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="../portal-assets/portal.css">
 </head>
 <body>
-<nav class="topnav"><div class="topnav-inner"><a href="../">Service Plan</a><a href="../delivery-library/">Delivery Library</a><a href="../request-workflow/">Request Workflow</a><a href="../subscription/">Subscription</a><a href="../dashboard-gallery/">Dashboards</a><a href="../insights/">Insights</a><a href="../data-collection/">Data Collection</a><a href="../next-requests/">Next Requests</a></div></nav>
+<nav class="topnav"><div class="topnav-inner"><a href="../">Service Plan</a><a href="../delivery-library/">Delivery Library</a><a href="../request-workflow/">Request Workflow</a><a href="../subscription/">Ticket Allowance</a><a href="../dashboard-gallery/">Dashboards</a><a href="../insights/">Insights</a><a href="../data-collection/">Data Collection</a><a href="../next-requests/">Next Requests</a></div></nav>
 <main class="shell">
 <section class="hero">
   <div class="hero-inner">
-    <div><p class="eyebrow">Subscription and Capacity</p><h1>Ticket use, quota, and estimated staff time saved</h1><p class="hero-copy">A lightweight account view for CAOs and staff: how much work has flowed through Karto, where it clusters, and what internal capacity the service is replacing.</p></div>
-    <aside class="hero-panel"><h2>Pay-as-you-go signal</h2><p>The current organization record shows a monthly quota of 10 tickets. This page uses live-record totals captured from the Airdrie namespace snapshot.</p></aside>
+    <div><p class="eyebrow">Ticket Allowance</p><h1>10 tickets per month and current use</h1><p class="hero-copy">A simple account view for staff: how many request records exist, how many have completed files, and what staff-hour estimates have been captured.</p></div>
+    <aside class="hero-panel"><h2>Monthly subscription</h2><p>Airdrie's current subscription includes 10 tickets per month. This page summarizes current ticket records and related planning estimates.</p></aside>
   </div>
 </section>
 <section class="section">
   <div class="metric-strip">
-    <div class="metric"><span class="num">105</span><span class="label">Ticket records</span><p>All Airdrie ticket records, including 2 Gmail-reconciled records.</p></div>
-    <div class="metric"><span class="num">64</span><span class="label">Tickets with files</span><p>Ticket records with completed-ticket attachments.</p></div>
-    <div class="metric"><span class="num">1,150</span><span class="label">Estimated hours</span><p>Current sum from ticket records with est_hrs values.</p></div>
-    <div class="metric"><span class="num">$80.5K</span><span class="label">Default value</span><p>Using the editable $70/hour loaded staff-cost assumption below.</p></div>
+    <div class="metric"><span class="num">10/month</span><span class="label">Ticket allowance</span><p>Airdrie&#x27;s monthly subscription allowance.</p></div>
+    <div class="metric"><span class="num">105</span><span class="label">Request records</span><p>All Airdrie ticket records, including 2 reconciled from email history.</p></div>
+    <div class="metric"><span class="num">64</span><span class="label">With completed files</span><p>Request records with completed-file attachments.</p></div>
+    <div class="metric"><span class="num">1,150</span><span class="label">Staff hours noted</span><p>Current sum from ticket records with est_hrs values.</p></div>
   </div>
 </section>
 <section class="section">
   <div class="calc" id="hours-calculator" data-hours="1150.0" data-tickets="105">
-  <h3>Human-hours saved calculator</h3>
-  <p>Uses the cumulative estimate stored in ticket records, then lets staff adjust the loaded hourly cost and reuse factor. Reuse factor accounts for the fact that a reusable report, table, or dashboard can support more than one meeting or decision.</p>
+  <h3>Staff-time planning calculator</h3>
+  <p>Uses the cumulative hour estimates stored in ticket records. Staff can adjust the hourly cost and reuse factor when they need a rough planning estimate for internal reporting.</p>
   <div class="calc-controls">
     <label>Total estimated hours<input id="calc-hours" type="number" min="0" step="1" value="1150"></label>
     <label>Loaded staff cost/hour<input id="calc-rate" type="number" min="0" step="5" value="70"></label>
@@ -35,8 +35,8 @@
   </div>
   <div class="calc-output">
     <div class="calc-stat"><strong id="out-hours">0</strong><span>Equivalent hours</span></div>
-    <div class="calc-stat"><strong id="out-value">$0</strong><span>Internal capacity value</span></div>
-    <div class="calc-stat"><strong id="out-per-ticket">$0</strong><span>Value per ticket</span></div>
+    <div class="calc-stat"><strong id="out-value">$0</strong><span>Planning estimate</span></div>
+    <div class="calc-stat"><strong id="out-per-ticket">$0</strong><span>Estimate per ticket</span></div>
   </div>
 </div>
 </section>

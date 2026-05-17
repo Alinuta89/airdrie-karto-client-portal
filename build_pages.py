@@ -23,7 +23,7 @@ NAV = [
     ("Service Plan", "/airdrie-karto-client-portal/"),
     ("Delivery Library", "/airdrie-karto-client-portal/delivery-library/"),
     ("Request Workflow", "/airdrie-karto-client-portal/request-workflow/"),
-    ("Subscription", "/airdrie-karto-client-portal/subscription/"),
+    ("Ticket Allowance", "/airdrie-karto-client-portal/subscription/"),
     ("Dashboards", "/airdrie-karto-client-portal/dashboard-gallery/"),
     ("Insights", "/airdrie-karto-client-portal/insights/"),
     ("Data Collection", "/airdrie-karto-client-portal/data-collection/"),
@@ -97,7 +97,7 @@ NEXT_REQUESTS = [
     {
         "name": "Affordable housing grant recipient reporting workflow",
         "why": "Airdrie can reduce manual follow-up by collecting recipient milestones, outputs, documents, and narrative updates in one repeatable workflow.",
-        "output": "Mareto-style intake form set, quarterly reporting dashboard, and export-ready grant accountability table.",
+        "output": "Structured intake forms, quarterly reporting dashboard, and export-ready grant accountability table.",
         "theme": "Grant reporting",
         "hours": 16,
     },
@@ -286,23 +286,23 @@ def topic_bars(ctx) -> str:
 
 def service_plan(ctx) -> str:
     body = hero(
-        "Airdrie service plan workspace",
-        "A client-facing operating view of Airdrie's Karto work: what has shipped, what is in the workflow, where the evidence base is clustering, and what should be ordered next.",
-        "What changed",
-        "The public-facing layer is now separated from the workflow layer. Staff can read the polished service plan first, then open the protected Karto request workflow when they need to create or manage a ticket.",
-        "Protected attachments remain in Karto. This page summarizes them without mirroring confidential filenames.",
+        "Airdrie service workspace",
+        "A staff view of requests, delivered work, ticket use, dashboards, insights, and draft ideas for future analysis.",
+        "How to use this",
+        "Start with the delivery library if you are looking for a finished report. Use the request workflow when you need a new briefing, table, dashboard, scan, or data collection task.",
+        "Protected files stay in the secure ticket records. This page only summarizes the work.",
     )
     body += f"""<section class="section">
   <div class="metric-strip">
-    {metric(str(len(ctx["tickets"])), "Ticket records", f'Live ticket records, including {ctx["gmail_reconciled"]} added from Gmail reconciliation.')}
-    {metric("10", "Monthly quota", "Current ticket quota recorded for the City of Airdrie organization.")}
-    {metric(str(ctx["completed_files"]), "Completed files", "Completed-ticket attachment references preserved in Karto.")}
-    {metric(f'{int(ctx["known_hours"]):,}', "Estimated hours", f'Summed across {ctx["known_hour_records"]} ticket records with hour estimates.')}
+    {metric(str(len(ctx["tickets"])), "Ticket records", f'Current request records, including {ctx["gmail_reconciled"]} reconciled from email history.')}
+    {metric("10", "Monthly allowance", "Airdrie's subscription includes 10 tickets per month.")}
+    {metric(str(ctx["completed_files"]), "Completed files", "Completed-file references preserved in secure ticket records.")}
+    {metric(f'{int(ctx["known_hours"]):,}', "Staff hours noted", f'Summed across {ctx["known_hour_records"]} ticket records with hour estimates.')}
   </div>
 </section>
 <section class="section">
   <div class="section-head">
-    <div><p class="section-label">Demand pattern</p><h2>Where Airdrie is already using Karto</h2></div>
+    <div><p class="section-label">Request pattern</p><h2>What Airdrie has been asking for</h2></div>
     <p class="lede">The current record clusters around housing, downtown revitalization, engagement, data analysis, homelessness strategy, land use, mixed-use development, and economic diversification.</p>
   </div>
   <div class="split">
@@ -315,8 +315,8 @@ def service_plan(ctx) -> str:
       <ul>
         <li>Housing and growth management are the core account themes, not one-off reports.</li>
         <li>Downtown, parking, STRs, and HAF compliance should be treated as a connected work program.</li>
-        <li>Airdrie has enough prior ticket volume to justify a better request workflow and a real delivery library.</li>
-        <li>Mareto-style data collection should support repeatable evidence gathering, not sit as a separate product pitch.</li>
+        <li>Airdrie has enough prior ticket volume to keep intake, delivery, and reference materials organized in one place.</li>
+        <li>Some repeat questions would benefit from structured data collection before the next analysis starts.</li>
       </ul>
     </div>
   </div>
@@ -327,9 +327,9 @@ def service_plan(ctx) -> str:
   </div>
   <div class="grid four">
     <a class="card" href="delivery-library/"><p class="kicker">1</p><h3>Read shipped work</h3><p>Start with the polished web reports and the protected Karto attachment archive.</p><div class="tags"><span class="tag">Reports</span><span class="tag">Word/PDF files</span></div></a>
-    <a class="card" href="subscription/"><p class="kicker">2</p><h3>Check ticket use</h3><p>Review quota, cumulative hours, file volume, and likely internal capacity saved.</p><div class="tags"><span class="tag">Quota</span><span class="tag">Hours saved</span></div></a>
-    <a class="card" href="next-requests/"><p class="kicker">3</p><h3>Pick the next request</h3><p>Use the recommended ticket list to convert known pressure points into scoped work.</p><div class="tags"><span class="tag">Pipeline</span><span class="tag">Council-ready</span></div></a>
-    <a class="card" href="{REQUEST_PAGE}"><p class="kicker">4</p><h3>Submit a request</h3><p>Use the polished intake form. It writes to the same backend ticket module so tracking remains intact.</p><div class="tags"><span class="tag">Workflow</span><span class="tag">Notifications</span></div></a>
+    <a class="card" href="subscription/"><p class="kicker">2</p><h3>Check ticket use</h3><p>Review the 10-ticket monthly allowance, completed files, and staff-hour estimates.</p><div class="tags"><span class="tag">10/month</span><span class="tag">Use</span></div></a>
+    <a class="card" href="next-requests/"><p class="kicker">3</p><h3>Review draft ideas</h3><p>Use the idea list as starting scope when a department needs another analysis request.</p><div class="tags"><span class="tag">Ideas</span><span class="tag">Scope</span></div></a>
+    <a class="card" href="{REQUEST_PAGE}"><p class="kicker">4</p><h3>Submit a request</h3><p>Fill out the request form with the question, deadline, intended use, and files to attach.</p><div class="tags"><span class="tag">Intake</span><span class="tag">Tracking</span></div></a>
   </div>
 </section>
 <p class="source-note">Selected public context links: <a href="https://www.cmhc-schl.gc.ca/media-newsroom/news-releases/2024/helping-build-more-homes-faster-airdrie" target="_blank" rel="noopener">CMHC Airdrie HAF announcement</a>; <a href="https://assets.cmhc-schl.gc.ca/sites/cmhc/professional/project-funding-and-mortgage-financing/funding-programs/all-funding-programs/housing-accelerator-fund/action-plan-summaries/haf-action-plan-summary-airdrie-en.pdf" target="_blank" rel="noopener">CMHC action plan summary</a>; <a href="https://www.airdrie.ca/index.cfm?serviceID=2578" target="_blank" rel="noopener">Airdrie four-homes-per-lot consultation page</a>.</p>
@@ -396,8 +396,8 @@ def request_workflow(ctx) -> str:
     )
     body = f"""<section class="hero">
   <div class="hero-inner">
-    <div><p class="eyebrow">Request Workflow</p><h1>Start a new Karto request</h1><p class="hero-copy">Use this polished intake instead of the raw Compose form. It writes into the same Airdrie ticket module so the backend workflow, status tracking, and audit trail stay intact.</p></div>
-    <aside class="hero-panel"><h2>Compose stays behind the scenes</h2><p>The client-facing layer is HTML. The Compose ticket module remains the system of record and notification middle layer.</p><p class="small">Staff must be signed into Karto for submission.</p></aside>
+    <div><p class="eyebrow">Request Workflow</p><h1>Submit a new request</h1><p class="hero-copy">Use this form when you need a briefing note, analysis, dashboard, table, scan, or data collection task. A clear decision question and useful source files help the work move faster.</p></div>
+    <aside class="hero-panel"><h2>What happens next</h2><p>Your request is saved to the Airdrie ticket workspace for review and tracking. If confidential files are needed, add them to the secure ticket record after submission.</p><p class="small">You must be signed into Karto before submitting.</p></aside>
   </div>
 </section>
 <section class="section">
@@ -467,14 +467,14 @@ def request_workflow(ctx) -> str:
       <button class="btn light" type="reset">Clear</button>
       <span class="form-status" id="ticket-status" role="status" aria-live="polite"></span>
     </div>
-    <div class="notice compact-note">This form creates the ticket record only. Attachments stay in protected Karto records; after submission, open the ticket archive only if you need to add confidential files.</div>
+    <div class="notice compact-note">This form creates the request record. Attach confidential files only in the secure ticket record or through an approved file-transfer channel.</div>
   </form>
 </section>
 <section class="section">
   <div class="grid three">
-    <div class="card"><p class="kicker">1</p><h3>Submit here</h3><p>The HTML intake writes into the same Compose ticket module used by the old form.</p></div>
-    <div class="card"><p class="kicker">2</p><h3>Workflow fires</h3><p>The existing after-create notification workflow remains attached to the ticket module.</p></div>
-    <div class="card"><p class="kicker">3</p><h3>Attach files safely</h3><p>Confidential source files remain in Karto's protected record layer rather than the public static site.</p></div>
+    <div class="card"><p class="kicker">1</p><h3>Submit the request</h3><p>Include the question, audience, deadline, expected output, and any context staff should know.</p></div>
+    <div class="card"><p class="kicker">2</p><h3>Review and confirm</h3><p>The request is recorded for follow-up, assignment, and status tracking.</p></div>
+    <div class="card"><p class="kicker">3</p><h3>Add files securely</h3><p>Reports, spreadsheets, agendas, or examples should be attached through the secure ticket record.</p></div>
   </div>
 </section>
 """
@@ -484,16 +484,16 @@ def request_workflow(ctx) -> str:
 def subscription(ctx) -> str:
     body = f"""<section class="hero">
   <div class="hero-inner">
-    <div><p class="eyebrow">Subscription and Capacity</p><h1>Ticket use, quota, and estimated staff time saved</h1><p class="hero-copy">A lightweight account view for CAOs and staff: how much work has flowed through Karto, where it clusters, and what internal capacity the service is replacing.</p></div>
-    <aside class="hero-panel"><h2>Pay-as-you-go signal</h2><p>The current organization record shows a monthly quota of 10 tickets. This page uses live-record totals captured from the Airdrie namespace snapshot.</p></aside>
+    <div><p class="eyebrow">Ticket Allowance</p><h1>10 tickets per month and current use</h1><p class="hero-copy">A simple account view for staff: how many request records exist, how many have completed files, and what staff-hour estimates have been captured.</p></div>
+    <aside class="hero-panel"><h2>Monthly subscription</h2><p>Airdrie's current subscription includes 10 tickets per month. This page summarizes current ticket records and related planning estimates.</p></aside>
   </div>
 </section>
 <section class="section">
   <div class="metric-strip">
-    {metric(str(len(ctx["tickets"])), "Ticket records", f'All Airdrie ticket records, including {ctx["gmail_reconciled"]} Gmail-reconciled records.')}
-    {metric(str(ctx["completed_records"]), "Tickets with files", "Ticket records with completed-ticket attachments.")}
-    {metric(f'{int(ctx["known_hours"]):,}', "Estimated hours", "Current sum from ticket records with est_hrs values.")}
-    {metric("$80.5K", "Default value", "Using the editable $70/hour loaded staff-cost assumption below.")}
+    {metric("10/month", "Ticket allowance", "Airdrie's monthly subscription allowance.")}
+    {metric(str(len(ctx["tickets"])), "Request records", f'All Airdrie ticket records, including {ctx["gmail_reconciled"]} reconciled from email history.')}
+    {metric(str(ctx["completed_records"]), "With completed files", "Request records with completed-file attachments.")}
+    {metric(f'{int(ctx["known_hours"]):,}', "Staff hours noted", "Current sum from ticket records with est_hrs values.")}
   </div>
 </section>
 <section class="section">
@@ -503,13 +503,13 @@ def subscription(ctx) -> str:
   <div class="notice">The calculator is intentionally editable. Replace the default loaded hourly rate with Airdrie's internal fully burdened analyst/planner rate for a local estimate.</div>
 </section>
 """
-    return layout("sub", "Subscription", body, calculator_script())
+    return layout("sub", "Ticket Allowance", body, calculator_script())
 
 
 def hours_calculator(ctx) -> str:
     return f"""<div class="calc" id="hours-calculator" data-hours="{ctx["known_hours"]}" data-tickets="{len(ctx["tickets"])}">
-  <h3>Human-hours saved calculator</h3>
-  <p>Uses the cumulative estimate stored in ticket records, then lets staff adjust the loaded hourly cost and reuse factor. Reuse factor accounts for the fact that a reusable report, table, or dashboard can support more than one meeting or decision.</p>
+  <h3>Staff-time planning calculator</h3>
+  <p>Uses the cumulative hour estimates stored in ticket records. Staff can adjust the hourly cost and reuse factor when they need a rough planning estimate for internal reporting.</p>
   <div class="calc-controls">
     <label>Total estimated hours<input id="calc-hours" type="number" min="0" step="1" value="{int(ctx["known_hours"])}"></label>
     <label>Loaded staff cost/hour<input id="calc-rate" type="number" min="0" step="5" value="70"></label>
@@ -517,8 +517,8 @@ def hours_calculator(ctx) -> str:
   </div>
   <div class="calc-output">
     <div class="calc-stat"><strong id="out-hours">0</strong><span>Equivalent hours</span></div>
-    <div class="calc-stat"><strong id="out-value">$0</strong><span>Internal capacity value</span></div>
-    <div class="calc-stat"><strong id="out-per-ticket">$0</strong><span>Value per ticket</span></div>
+    <div class="calc-stat"><strong id="out-value">$0</strong><span>Planning estimate</span></div>
+    <div class="calc-stat"><strong id="out-per-ticket">$0</strong><span>Estimate per ticket</span></div>
   </div>
 </div>"""
 
@@ -611,14 +611,14 @@ def data_collection_page(ctx) -> str:
     body = f"""<section class="hero">
   <div class="hero-inner">
     <div><p class="eyebrow">Data Collection Options</p><h1>Make future tickets easier by collecting the missing evidence once</h1><p class="hero-copy">The next layer is not another static report. It is repeatable intake, tracking, and reporting workflows that feed future Karto analysis with Airdrie-specific evidence.</p></div>
-    <aside class="hero-panel"><h2>Mareto fit</h2><p>Use Mareto-style forms and workflows where the City needs recurring data from staff, partners, recipients, or residents. Use Karto to analyze the resulting evidence.</p></aside>
+    <aside class="hero-panel"><h2>Structured collection</h2><p>Use structured forms and workflows where the City needs recurring data from staff, partners, recipients, or residents. The resulting evidence can feed future analysis.</p></aside>
   </div>
 </section>
 <section class="section">
   <div class="table-panel"><table class="matrix"><thead><tr><th>Workflow</th><th>Data captured</th><th>Why it matters</th></tr></thead><tbody>{table}</tbody></table></div>
 </section>
 <section class="section">
-  <div class="notice"><strong>Positioning:</strong> This is a data collection and reporting option, not a separate product detour. The purpose is to make future policy tickets faster, more local, and easier to defend.</div>
+  <div class="notice"><strong>Purpose:</strong> These options are for recurring information needs where one structured collection process would make future requests easier and more defensible.</div>
 </section>
 """
     return layout("sub", "Data Collection", body)
@@ -637,8 +637,8 @@ def next_requests_page(ctx) -> str:
     )
     body = f"""<section class="hero">
   <div class="hero-inner">
-    <div><p class="eyebrow">Next Requests</p><h1>Ticket ideas based on Airdrie's actual demand pattern</h1><p class="hero-copy">These are scoped to the topics already appearing in Airdrie's tickets and public policy context: housing delivery, HAF, STRs, downtown, grant reporting, engagement, and regional pressure.</p><div class="actions"><a class="btn primary" href="{REQUEST_PAGE}">Order in Karto</a></div></div>
-    <aside class="hero-panel"><h2>How to use this</h2><p>Pick one card, paste the title into the Karto request workflow, and attach any current council package or staff report that should anchor the work.</p></aside>
+    <div><p class="eyebrow">Next Requests</p><h1>Draft request ideas based on Airdrie's current work</h1><p class="hero-copy">These are starting points for staff when a department needs another briefing, dashboard, table, scan, or structured data collection task.</p><div class="actions"><a class="btn primary" href="{REQUEST_PAGE}">Start a request</a></div></div>
+    <aside class="hero-panel"><h2>How to use this</h2><p>Pick one card, adjust the scope for your department, and attach any current council package or staff report that should anchor the work.</p></aside>
   </div>
 </section>
 <section class="section"><div class="grid two">{cards}</div></section>
