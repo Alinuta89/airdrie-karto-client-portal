@@ -215,8 +215,13 @@ def build_context():
     completed_records = 0
     completed_files = 0
     supporting_files = 0
+    gmail_reconciled = 0
     for record in tickets:
         vals = values_map(record.get("values"))
+        status_notes = str(vals.get("status_notes") or "")
+        status_notes_l = status_notes.lower()
+        if "gmail" in status_notes_l and "reconciliation" in status_notes_l:
+            gmail_reconciled += 1
         topics = as_list(vals.get("ticket_topic") or "Unspecified")
         for topic in topics:
             topic_counts[str(topic).replace("_", " ")] += 1
@@ -258,6 +263,7 @@ def build_context():
         "completed_records": completed_records,
         "completed_files": completed_files,
         "supporting_files": supporting_files,
+        "gmail_reconciled": gmail_reconciled,
         "ticket_rows": ticket_rows,
     }
 
@@ -287,7 +293,7 @@ def service_plan(ctx) -> str:
     )
     body += f"""<section class="section">
   <div class="metric-strip">
-    {metric(str(len(ctx["tickets"])), "Ticket records", "Live ticket records in the City of Airdrie namespace.")}
+    {metric(str(len(ctx["tickets"])), "Ticket records", f'Live ticket records, including {ctx["gmail_reconciled"]} added from Gmail reconciliation.')}
     {metric("10", "Monthly quota", "Current ticket quota recorded for the City of Airdrie organization.")}
     {metric(str(ctx["completed_files"]), "Completed files", "Completed-ticket attachment references preserved in Karto.")}
     {metric(f'{int(ctx["known_hours"]):,}', "Estimated hours", f'Summed across {ctx["known_hour_records"]} ticket records with hour estimates.')}
@@ -379,7 +385,7 @@ def subscription(ctx) -> str:
 </section>
 <section class="section">
   <div class="metric-strip">
-    {metric(str(len(ctx["tickets"])), "Ticket records", "All Airdrie ticket records in the namespace.")}
+    {metric(str(len(ctx["tickets"])), "Ticket records", f'All Airdrie ticket records, including {ctx["gmail_reconciled"]} Gmail-reconciled records.')}
     {metric(str(ctx["completed_records"]), "Tickets with files", "Ticket records with completed-ticket attachments.")}
     {metric(f'{int(ctx["known_hours"]):,}', "Estimated hours", "Current sum from ticket records with est_hrs values.")}
     {metric("$80.5K", "Default value", "Using the editable $70/hour loaded staff-cost assumption below.")}
@@ -575,6 +581,7 @@ def main() -> int:
         "insight_records": len(ctx["insights"]),
         "completed_file_refs": ctx["completed_files"],
         "supporting_file_refs": ctx["supporting_files"],
+        "gmail_reconciled_ticket_records": ctx["gmail_reconciled"],
         "known_estimated_hours": ctx["known_hours"],
         "public_attachment_filenames_mirrored": False,
         "protected_download_source": TICKET_LIST_PAGE,
