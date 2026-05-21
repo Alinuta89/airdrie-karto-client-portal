@@ -65,6 +65,76 @@ PUBLIC_DELIVERABLES = [
 ]
 
 
+EXTERNAL_REPORTS = [
+    {
+        "folder": "regional-housing-coalition",
+        "title": "Regional Housing Coalition",
+        "eyebrow": "Regional Housing Coalition",
+        "headline": "Regional housing coalition strategy",
+        "copy": "A client-facing wrapper for the regional housing coalition briefing, keeping the Airdrie workspace navigation and header consistent with the rest of the portal.",
+        "panel_title": "Published briefing",
+        "panel_text": "The source report remains hosted in the protected deliverables container. Use the embedded view below for reading inside Karto or open the report in a new tab.",
+        "source_url": "https://hsdeliverables.z9.web.core.windows.net/airdrie/mfah/",
+        "source_label": "Open Briefing",
+    },
+    {
+        "folder": "housing-pressure-index",
+        "title": "Housing Pressure Index",
+        "eyebrow": "Housing Pressure Index",
+        "headline": "Housing pressure benchmark dashboard",
+        "copy": "A consistent Airdrie portal frame for the pressure-index dashboard, with the same navigation, header, and action pattern as the request workflow.",
+        "panel_title": "Interactive dashboard",
+        "panel_text": "The dashboard loads below. Open it in a new tab when staff need the largest workspace for filtering or presentation.",
+        "source_url": "https://hsdeliverables.z9.web.core.windows.net/pressure-index/",
+        "source_label": "Open Dashboard",
+    },
+    {
+        "folder": "digital-billboard-risk-analysis",
+        "title": "Digital Billboard Risk Analysis",
+        "eyebrow": "Risk Analysis",
+        "headline": "Digital billboard risk analysis",
+        "copy": "A consistent portal entry for the digital billboard report covering risk, litigation exposure, and municipal operating considerations.",
+        "panel_title": "Published web report",
+        "panel_text": "The report remains hosted as a standalone deliverable. This wrapper makes it feel native to the Airdrie Karto workspace.",
+        "source_url": "https://hsdeliverables.z9.web.core.windows.net/airdrie/billboard-risk/index.html?v=3",
+        "source_label": "Open Report",
+    },
+    {
+        "folder": "youth-service-hubs",
+        "title": "Youth Service Hubs",
+        "eyebrow": "Youth Service Hubs",
+        "headline": "Youth service hubs research",
+        "copy": "A consistent portal entry for the youth hubs report, linking the deliverable back to the broader Airdrie service-planning workspace.",
+        "panel_title": "Published web report",
+        "panel_text": "Use this page for client navigation. The embedded report keeps the original research layout intact.",
+        "source_url": "https://hsdeliverables.z9.web.core.windows.net/karto/kt-016-youth-hubs/?v=4",
+        "source_label": "Open Report",
+    },
+    {
+        "folder": "parking-trade-off-analysis",
+        "title": "Parking Trade-Off Analysis",
+        "eyebrow": "Parking Trade-Off Analysis",
+        "headline": "Parking trade-off report",
+        "copy": "A consistent portal entry for the parking trade-off report, connecting parking standards, affordability, downtown development, and council-ready choices.",
+        "panel_title": "Published web report",
+        "panel_text": "The original report loads below. Use the new-tab action for full-screen review or presentation.",
+        "source_url": "https://hsdeliverables.z9.web.core.windows.net/airdrie/parking-tradeoff/index.html?v=2",
+        "source_label": "Open Report",
+    },
+    {
+        "folder": "secondary-suites-str",
+        "title": "Secondary Suites & STR",
+        "eyebrow": "Secondary Suites & STR",
+        "headline": "Secondary suites and short-term rentals",
+        "copy": "A consistent portal entry for the STR and suite-controls deliverable, tying the report back to Airdrie's housing and HAF work program.",
+        "panel_title": "Published web report",
+        "panel_text": "The report remains hosted in the deliverables container. This page provides a matching Airdrie portal header and navigation shell.",
+        "source_url": "https://hsdeliverables.z9.web.core.windows.net/airdrie/str/index.html?v=1",
+        "source_label": "Open Report",
+    },
+]
+
+
 NEXT_REQUESTS = [
     {
         "name": "HAF milestone and amendment risk tracker",
@@ -664,6 +734,38 @@ def housing_labour_page(ctx) -> str:
     return layout("sub", "Housing Labour", body)
 
 
+def external_report_page(report: dict[str, str]) -> str:
+    body = f"""<section class="hero">
+  <div class="hero-inner">
+    <div><p class="eyebrow">{esc(report["eyebrow"])}</p><h1>{esc(report["headline"])}</h1><p class="hero-copy">{esc(report["copy"])}</p><div class="actions"><a class="btn primary" href="{esc(report["source_url"])}" target="_blank" rel="noopener">{esc(report["source_label"])}</a><a class="btn ghost" href="../delivery-library/">Back to Delivery Library</a></div></div>
+    <aside class="hero-panel"><h2>{esc(report["panel_title"])}</h2><p>{esc(report["panel_text"])}</p><p class="small">Protected source records and attachments remain in Karto.</p></aside>
+  </div>
+</section>
+<section class="section">
+  <div class="report-frame"><iframe title="{esc(report["title"])}" src="{esc(report["source_url"])}" loading="lazy"></iframe></div>
+</section>
+"""
+    return layout("sub", report["title"], body)
+
+
+def ticket_archive_page() -> str:
+    body = f"""<section class="hero">
+  <div class="hero-inner">
+    <div><p class="eyebrow">Ticket Archive</p><h1>Protected Airdrie ticket archive</h1><p class="hero-copy">Use this page when staff need the secure record list rather than the public delivery library. Attachments, private notes, and audit history stay inside Karto.</p><div class="actions"><a class="btn primary" href="{TICKET_LIST_PAGE}" target="_blank" rel="noopener">Open Protected Archive</a><a class="btn ghost" href="../delivery-library/">View Delivery Library</a></div></div>
+    <aside class="hero-panel"><h2>Secure source of truth</h2><p>The delivery library summarizes client-readable outputs. The ticket archive is the authenticated workspace for records, private files, and internal status tracking.</p><p class="small">You must be signed into Karto to open protected records.</p></aside>
+  </div>
+</section>
+<section class="section">
+  <div class="grid three">
+    <div class="card"><p class="kicker">Records</p><h3>Ticket history</h3><p>Review request status, scope, owners, estimates, and completion context in the protected Karto module.</p></div>
+    <div class="card"><p class="kicker">Files</p><h3>Protected attachments</h3><p>Use Karto records for Word, PDF, spreadsheets, and source files that should not be mirrored into the public static layer.</p></div>
+    <div class="card"><p class="kicker">Audit</p><h3>Workspace trail</h3><p>Keep changes, follow-up, and private handling inside the authenticated archive rather than a public page.</p></div>
+  </div>
+</section>
+"""
+    return layout("sub", "Ticket Archive", body)
+
+
 def write_page(path: Path, html_text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(html_text)
@@ -680,6 +782,9 @@ def main() -> int:
     write_page(ROOT / "data-collection" / "index.html", data_collection_page(ctx))
     write_page(ROOT / "next-requests" / "index.html", next_requests_page(ctx))
     write_page(ROOT / "housing-labour" / "index.html", housing_labour_page(ctx))
+    for report in EXTERNAL_REPORTS:
+        write_page(ROOT / report["folder"] / "index.html", external_report_page(report))
+    write_page(ROOT / "ticket-archive" / "index.html", ticket_archive_page())
     manifest = {
         "ticket_records": len(ctx["tickets"]),
         "dashboard_records": len(ctx["dashboards"]),

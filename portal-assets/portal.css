@@ -365,6 +365,24 @@ h1, h2, h3, p { margin-top: 0; }
 }
 .source-note a { color: var(--teal-dark); text-decoration: underline; }
 
+.report-frame {
+  width: 100%;
+  height: min(1040px, 86vh);
+  min-height: 760px;
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: var(--shadow);
+}
+.report-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--white);
+}
+
 .intake-form {
   background: var(--white);
   border: 1px solid var(--border);
@@ -490,6 +508,7 @@ h1, h2, h3, p { margin-top: 0; }
   .section-head { display: block; }
   .form-head { display: block; }
   .intake-form { padding: 20px; }
+  .report-frame { height: 760px; min-height: 680px; }
   .bar-row { grid-template-columns: 1fr; gap: 6px; }
   .bar-num { text-align: left; }
 }
