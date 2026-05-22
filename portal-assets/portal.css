@@ -114,7 +114,7 @@ h1, h2, h3, p { margin-top: 0; }
   max-width: 850px;
   color: rgba(255, 255, 255, .86);
   font-size: 20px;
-  font-weight: 300;
+  font-weight: 400;
 }
 .hero-panel {
   padding: 22px;
@@ -637,7 +637,7 @@ body.report-skin {
   max-width: 760px;
   color: #EAF7F6;
   font-size: clamp(15px, 1.8vw, 19px);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.5;
 }
 .report-skin .hero .meta {
@@ -708,7 +708,7 @@ body.report-skin {
   max-width: 760px;
   color: var(--text-secondary);
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
 }
 .report-skin .tiers {
   display: grid;
@@ -856,7 +856,7 @@ body.report-skin {
   max-width: 780px;
   color: var(--text-secondary);
   font-size: 13.5px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.65;
 }
 .report-skin .note p + p { margin-top: 10px; }
@@ -876,7 +876,7 @@ body.report-skin {
   margin-bottom: 24px;
   color: var(--text-secondary);
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.65;
 }
 .report-skin .doc-toolbar {
@@ -926,7 +926,7 @@ body.report-skin {
 .report-skin .doc-article li {
   color: var(--text-secondary);
   font-size: 15.5px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.7;
 }
 .report-skin .doc-article p { margin-bottom: 16px; }
@@ -1005,7 +1005,7 @@ body.report-skin {
   background: var(--deep-navy);
   color: rgba(255,255,255,.7);
   font-size: 13px;
-  font-weight: 300;
+  font-weight: 400;
 }
 .report-skin footer .footer-inner {
   max-width: 1080px;
@@ -1022,6 +1022,23 @@ body.report-skin {
 .report-skin footer a {
   color: var(--aqua);
   text-decoration: none;
+}
+.report-skin.interactive-page {
+  background: #FFFFFF;
+}
+.report-skin.interactive-page main,
+.report-skin.interactive-page main.interactive-frame-main {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+.report-skin.interactive-page .report-frame {
+  width: 100%;
+  height: 100vh;
+  min-height: 900px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .intake-form {
