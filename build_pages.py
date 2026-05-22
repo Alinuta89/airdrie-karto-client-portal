@@ -139,7 +139,7 @@ STR_DOC_LINKS = [
     {
         "href": "technical-report/",
         "eyebrow": "Technical Report",
-        "icon": "Source",
+        "icon": "menu_book",
         "title": "Source of truth",
         "audience": "For: full-text reference · APA 7 · 20 jurisdictions",
         "description": "Formal report covering the evidence reviews, comparative jurisdictional matrix, equity analysis, and legal-defensibility scorecard with full bibliography. Every claim cited, every assumption stated.",
@@ -147,7 +147,7 @@ STR_DOC_LINKS = [
     {
         "href": "decision-support-brief/",
         "eyebrow": "Decision-Support Brief",
-        "icon": "Brief",
+        "icon": "description",
         "title": "The two-page answer",
         "audience": "For: anyone who needs the bottom line fast",
         "description": "Standalone decision-ready brief covering Sections A through F: direct answer on caps, key risks, viable alternatives, STR role, strategic considerations, and evidence-based conclusion.",
@@ -155,7 +155,7 @@ STR_DOC_LINKS = [
     {
         "href": "statements-council/",
         "eyebrow": "Council Briefing",
-        "icon": "Council",
+        "icon": "gavel",
         "title": "For the room where the vote happens",
         "audience": "For: elected council · CISG Standing Committee",
         "description": "Written to be read the morning of a committee meeting. Sequencing-first framing with the Edmonton 50% and Cochrane 232% empirical counter-evidence for swing-vote audiences.",
@@ -163,7 +163,7 @@ STR_DOC_LINKS = [
     {
         "href": "statements-elt/",
         "eyebrow": "ELT Briefing",
-        "icon": "ELT",
+        "icon": "summarize",
         "title": "For the CAO and directors",
         "audience": "For: Executive Leadership Team · cross-departmental implementation",
         "description": "HAF compliance risk, Bill 18 and Bill 20 latent exposure, cross-departmental implementation sequencing, and audit readiness for executive decision-makers.",
@@ -171,7 +171,7 @@ STR_DOC_LINKS = [
     {
         "href": "statements-planner/",
         "eyebrow": "Planner Briefing",
-        "icon": "Plan",
+        "icon": "architecture",
         "title": "For the team drafting the bylaw",
         "audience": "For: municipal planning staff · bylaw drafting",
         "description": "Bylaw drafting guidance, consolidated peer-jurisdiction parameters, and verification flags for B-30/2024 and B-06/2025 follow-on work. The version planners keep open while writing.",
@@ -179,7 +179,7 @@ STR_DOC_LINKS = [
     {
         "href": "interactive-briefing/",
         "eyebrow": "Interactive Briefing",
-        "icon": "View",
+        "icon": "dashboard",
         "title": "Branded Policy Briefing",
         "audience": "Full branded briefing",
         "description": "Full branded briefing with council brief, executive briefing, evidence record, and jurisdictional comparison views bundled into a single navigable HTML artifact. The version you share with stakeholders.",
@@ -281,7 +281,33 @@ def topnav(prefix: str) -> str:
     return '<nav class="topnav"><div class="topnav-inner">' + "".join(links) + "</div></nav>"
 
 
-def layout(page: str, title: str, body: str, extra_script: str = "") -> str:
+def layout(page: str, title: str, body: str, extra_script: str = "", body_class: str = "") -> str:
+    prefix = rel_prefix(page)
+    body_attr = f' class="{esc(body_class)}"' if body_class else ""
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{esc(title)} - City of Airdrie Karto</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230B1F33'/%3E%3Ccircle cx='11' cy='11' r='5' fill='%234FD1C5'/%3E%3Ccircle cx='21' cy='11' r='5' fill='%230FB9B1'/%3E%3Ccircle cx='11' cy='21' r='5' fill='%230FB9B1'/%3E%3Ccircle cx='21' cy='21' r='5' fill='%234FD1C5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+<link rel="stylesheet" href="{prefix}portal-assets/portal.css">
+</head>
+<body{body_attr}>
+{topnav(prefix)}
+<main class="shell">
+{body}
+</main>
+{extra_script}
+</body>
+</html>
+"""
+
+
+def report_layout(page: str, title: str, body: str) -> str:
     prefix = rel_prefix(page)
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -290,14 +316,13 @@ def layout(page: str, title: str, body: str, extra_script: str = "") -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)} - City of Airdrie Karto</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230B1F33'/%3E%3Ccircle cx='11' cy='11' r='5' fill='%234FD1C5'/%3E%3Ccircle cx='21' cy='11' r='5' fill='%230FB9B1'/%3E%3Ccircle cx='11' cy='21' r='5' fill='%230FB9B1'/%3E%3Ccircle cx='21' cy='21' r='5' fill='%234FD1C5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
 <link rel="stylesheet" href="{prefix}portal-assets/portal.css">
 </head>
-<body>
-{topnav(prefix)}
-<main class="shell">
+<body class="report-skin">
 {body}
-</main>
-{extra_script}
 </body>
 </html>
 """
@@ -824,31 +849,77 @@ def ticket_archive_page() -> str:
 
 def str_portal_page() -> str:
     cards = "\n".join(
-        f"""<a class="doc-card" href="{esc(item["href"])}">
-  <p class="kicker">{esc(item["eyebrow"])}</p>
-  <div class="doc-icon">{esc(item["icon"])}</div>
-  <h3>{esc(item["title"])}</h3>
-  <p class="doc-audience">{esc(item["audience"])}</p>
-  <p>{esc(item["description"])}</p>
+        f"""<a class="tier" href="{esc(item["href"])}">
+  <div class="tier-badge">{esc(item["eyebrow"])}<span class="tier-icon material-symbols-outlined">{esc(item["icon"])}</span></div>
+  <div class="tier-body">
+    <h3>{esc(item["title"])}</h3>
+    <div class="audience">{esc(item["audience"])}</div>
+    <p>{esc(item["description"])}</p>
+  </div>
+  <div class="tier-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
 </a>"""
         for item in STR_DOC_LINKS
+        if item["href"] != "interactive-briefing/"
     )
-    body = f"""<section class="hero">
+    interactive = next(item for item in STR_DOC_LINKS if item["href"] == "interactive-briefing/")
+    body = f"""<header class="hero">
   <div class="hero-inner">
-    <div><p class="eyebrow">City of Airdrie · Jurisdictional Scan</p><h1>Secondary Suite Density &amp; Short-Term Rental Controls</h1><p class="hero-copy">Comparative scan across 20 Canadian municipalities of the regulatory levers Airdrie council can use to manage neighbourhood-scale residential intensification within the binding constraints of the federal Housing Accelerator Fund agreement and Alberta's legislative landscape.</p><div class="actions"><a class="btn primary" href="decision-support-brief/">Open Decision Brief</a><a class="btn ghost" href="../delivery-library/">Back to Delivery Library</a></div></div>
-    <aside class="hero-panel"><h2>Five documents. One evidence base.</h2><p>The technical report is the source of truth. The decision-support brief, council, ELT, and planner briefings are derived from it for different audiences. The interactive briefing bundles all views into a single navigable artifact.</p><p class="small">Protected source records and attachments remain in Karto.</p></aside>
+    <div class="eyebrow">City of Airdrie · Jurisdictional Scan</div>
+    <h1>Secondary Suite Density &amp; Short-Term Rental Controls</h1>
+    <p class="lede">Comparative scan across 20 Canadian municipalities of the regulatory levers Airdrie council can use to manage neighbourhood-scale residential intensification within the binding constraints of the federal Housing Accelerator Fund agreement and Alberta's legislative landscape.</p>
+    <div class="meta">
+      <div><strong>Client</strong>City of Airdrie, Alberta</div>
+      <div><strong>Prepared</strong>May 2026 · Consultation close May 25, 2026</div>
+      <div><strong>Scope</strong>Secondary suites, density caps, STR licensing, HAF compliance</div>
+    </div>
   </div>
-</section>
-<section class="section">
-  <div class="section-head"><div><p class="section-label">Choose your view</p><h2>Five documents. One evidence base.</h2></div><p class="lede">The technical report is the source of truth. The decision-support brief, council, ELT, and planner briefings are derived from it for different audiences. The interactive briefing bundles all views into a single navigable artifact.</p></div>
-  <div class="doc-grid">{cards}</div>
-</section>
-<section class="section">
-  <div class="notice"><strong>Suggested starting points:</strong> For council members preparing for the Community Infrastructure &amp; Strategic Growth Standing Committee meeting, start with the Decision-Support Brief. For planning staff drafting bylaw language, start with the Planner Briefing.</div>
-  <p class="source-note">Displayed statistics are drawn from the technical report and linked public records. This analysis is for informational purposes. Verify in-force bylaw text, HAF disbursement status, and named staff before client-facing publication.</p>
-</section>
+</header>
+<main>
+  <section class="intro">
+    <div class="intro-eyebrow">Choose your view</div>
+    <h2>Five documents. One evidence base.</h2>
+    <p>The technical report is the source of truth. The decision-support brief, council, ELT, and planner briefings are derived from it for different audiences. The interactive briefing bundles all views into a single navigable artifact.</p>
+  </section>
+  <div class="tiers">{cards}</div>
+  <a class="featured-card" href="{esc(interactive["href"])}">
+    <div>
+      <div class="featured-eyebrow">{esc(interactive["eyebrow"])}</div>
+      <h3>{esc(interactive["title"])}</h3>
+      <p>{esc(interactive["description"])}</p>
+    </div>
+    <div class="featured-icon"><span class="material-symbols-outlined">{esc(interactive["icon"])}</span></div>
+  </a>
+  <details class="note">
+    <summary style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;list-style:none">
+      <h4 style="margin:0;font-size:18px;font-weight:700;color:var(--deep-navy)">Reading order</h4>
+      <span style="width:26px;height:26px;border:1px solid rgba(15,185,177,0.4);border-radius:var(--r-sm);color:var(--deep-teal);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0" class="note-toggle"></span>
+    </summary>
+    <div style="margin-top:14px">
+      <p>For council members preparing for the Community Infrastructure &amp; Strategic Growth Standing Committee meeting, start with the <strong>Decision-Support Brief</strong>. For planning staff drafting bylaw language, start with the <strong>Planner Briefing</strong> and reference the Technical Report for in-force peer-jurisdiction parameters. The <strong>Branded Policy Briefing</strong> bundles council, executive, and research views in a single interactive artifact.</p>
+    </div>
+  </details>
+  <details class="note" style="margin-top:20px">
+    <summary style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;list-style:none">
+      <h4 style="margin:0;font-size:18px;font-weight:700;color:var(--deep-navy)">Source posture</h4>
+      <span style="width:26px;height:26px;border:1px solid rgba(15,185,177,0.4);border-radius:var(--r-sm);color:var(--deep-teal);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0" class="note-toggle"></span>
+    </summary>
+    <div style="margin-top:14px">
+      <p>Displayed statistics are drawn from the technical report and linked public records. Load-bearing public links include the CMHC Airdrie HAF announcement, CMHC Airdrie Action Plan Summary, CMHC Red Deer HAF update, Alberta Provincial Priorities Act municipal guidance, and the Toronto Auditor General STR audit. APA 7 references are embedded in the technical report and interactive briefing evidence record.</p>
+      <p>This analysis is for informational purposes. Verify in-force bylaw text, HAF disbursement status, and named staff before client-facing publication.</p>
+    </div>
+  </details>
+</main>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <strong>HelpSeeker Technologies</strong>
+      Secondary Suite Density &amp; Short-Term Rental Controls · City of Airdrie · Prepared by HelpSeeker Technologies / Karto Research. Jurisdictional scan across 20 Canadian municipalities covering density rules, STR licensing, HAF compliance, and provincial legislative constraints.
+    </div>
+    <div>v1.0 · 2026-05-11</div>
+  </div>
+</footer>
 """
-    return layout("sub", "Secondary Suites & STR", body)
+    return report_layout("sub", "Secondary Suites & STR", body)
 
 
 def write_page(path: Path, html_text: str) -> None:
