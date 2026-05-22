@@ -307,8 +307,9 @@ def layout(page: str, title: str, body: str, extra_script: str = "", body_class:
 """
 
 
-def report_layout(page: str, title: str, body: str) -> str:
+def report_layout(page: str, title: str, body: str, body_class: str = "report-skin") -> str:
     prefix = rel_prefix(page)
+    safe_body_class = esc(body_class)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -321,7 +322,7 @@ def report_layout(page: str, title: str, body: str) -> str:
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
 <link rel="stylesheet" href="{prefix}portal-assets/portal.css">
 </head>
-<body class="report-skin">
+<body class="{safe_body_class}">
 {body}
 </body>
 </html>
@@ -816,17 +817,11 @@ def housing_labour_page(ctx) -> str:
 
 
 def external_report_page(report: dict[str, str]) -> str:
-    body = f"""<section class="hero">
-  <div class="hero-inner">
-    <div><p class="eyebrow">{esc(report["eyebrow"])}</p><h1>{esc(report["headline"])}</h1><p class="hero-copy">{esc(report["copy"])}</p><div class="actions"><a class="btn primary" href="{esc(report["source_url"])}" target="_blank" rel="noopener">{esc(report["source_label"])}</a><a class="btn ghost" href="../delivery-library/">Back to Delivery Library</a></div></div>
-    <aside class="hero-panel"><h2>{esc(report["panel_title"])}</h2><p>{esc(report["panel_text"])}</p><p class="small">Protected source records and attachments remain in Karto.</p></aside>
-  </div>
-</section>
-<section class="section">
+    body = f"""<main class="interactive-frame-main">
   <div class="report-frame"><iframe title="{esc(report["title"])}" src="{esc(report["source_url"])}" loading="lazy"></iframe></div>
-</section>
+</main>
 """
-    return layout("sub", report["title"], body)
+    return report_layout("sub", report["title"], body, "report-skin interactive-page")
 
 
 def ticket_archive_page() -> str:
