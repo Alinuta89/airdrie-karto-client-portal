@@ -135,6 +135,58 @@ EXTERNAL_REPORTS = [
 ]
 
 
+STR_DOC_LINKS = [
+    {
+        "href": "technical-report/",
+        "eyebrow": "Technical Report",
+        "icon": "Source",
+        "title": "Source of truth",
+        "audience": "For: full-text reference · APA 7 · 20 jurisdictions",
+        "description": "Formal report covering the evidence reviews, comparative jurisdictional matrix, equity analysis, and legal-defensibility scorecard with full bibliography. Every claim cited, every assumption stated.",
+    },
+    {
+        "href": "decision-support-brief/",
+        "eyebrow": "Decision-Support Brief",
+        "icon": "Brief",
+        "title": "The two-page answer",
+        "audience": "For: anyone who needs the bottom line fast",
+        "description": "Standalone decision-ready brief covering Sections A through F: direct answer on caps, key risks, viable alternatives, STR role, strategic considerations, and evidence-based conclusion.",
+    },
+    {
+        "href": "statements-council/",
+        "eyebrow": "Council Briefing",
+        "icon": "Council",
+        "title": "For the room where the vote happens",
+        "audience": "For: elected council · CISG Standing Committee",
+        "description": "Written to be read the morning of a committee meeting. Sequencing-first framing with the Edmonton 50% and Cochrane 232% empirical counter-evidence for swing-vote audiences.",
+    },
+    {
+        "href": "statements-elt/",
+        "eyebrow": "ELT Briefing",
+        "icon": "ELT",
+        "title": "For the CAO and directors",
+        "audience": "For: Executive Leadership Team · cross-departmental implementation",
+        "description": "HAF compliance risk, Bill 18 and Bill 20 latent exposure, cross-departmental implementation sequencing, and audit readiness for executive decision-makers.",
+    },
+    {
+        "href": "statements-planner/",
+        "eyebrow": "Planner Briefing",
+        "icon": "Plan",
+        "title": "For the team drafting the bylaw",
+        "audience": "For: municipal planning staff · bylaw drafting",
+        "description": "Bylaw drafting guidance, consolidated peer-jurisdiction parameters, and verification flags for B-30/2024 and B-06/2025 follow-on work. The version planners keep open while writing.",
+    },
+    {
+        "href": "interactive-briefing/",
+        "eyebrow": "Interactive Briefing",
+        "icon": "View",
+        "title": "Branded Policy Briefing",
+        "audience": "Full branded briefing",
+        "description": "Full branded briefing with council brief, executive briefing, evidence record, and jurisdictional comparison views bundled into a single navigable HTML artifact. The version you share with stakeholders.",
+    },
+]
+
+
 NEXT_REQUESTS = [
     {
         "name": "HAF milestone and amendment risk tracker",
@@ -212,7 +264,11 @@ def esc(value) -> str:
 
 
 def rel_prefix(page: str) -> str:
-    return "" if page == "index" else "../"
+    if page == "index":
+        return ""
+    if page == "nested":
+        return "../../"
+    return "../"
 
 
 def topnav(prefix: str) -> str:
@@ -766,9 +822,38 @@ def ticket_archive_page() -> str:
     return layout("sub", "Ticket Archive", body)
 
 
+def str_portal_page() -> str:
+    cards = "\n".join(
+        f"""<a class="doc-card" href="{esc(item["href"])}">
+  <p class="kicker">{esc(item["eyebrow"])}</p>
+  <div class="doc-icon">{esc(item["icon"])}</div>
+  <h3>{esc(item["title"])}</h3>
+  <p class="doc-audience">{esc(item["audience"])}</p>
+  <p>{esc(item["description"])}</p>
+</a>"""
+        for item in STR_DOC_LINKS
+    )
+    body = f"""<section class="hero">
+  <div class="hero-inner">
+    <div><p class="eyebrow">City of Airdrie · Jurisdictional Scan</p><h1>Secondary Suite Density &amp; Short-Term Rental Controls</h1><p class="hero-copy">Comparative scan across 20 Canadian municipalities of the regulatory levers Airdrie council can use to manage neighbourhood-scale residential intensification within the binding constraints of the federal Housing Accelerator Fund agreement and Alberta's legislative landscape.</p><div class="actions"><a class="btn primary" href="decision-support-brief/">Open Decision Brief</a><a class="btn ghost" href="../delivery-library/">Back to Delivery Library</a></div></div>
+    <aside class="hero-panel"><h2>Five documents. One evidence base.</h2><p>The technical report is the source of truth. The decision-support brief, council, ELT, and planner briefings are derived from it for different audiences. The interactive briefing bundles all views into a single navigable artifact.</p><p class="small">Protected source records and attachments remain in Karto.</p></aside>
+  </div>
+</section>
+<section class="section">
+  <div class="section-head"><div><p class="section-label">Choose your view</p><h2>Five documents. One evidence base.</h2></div><p class="lede">The technical report is the source of truth. The decision-support brief, council, ELT, and planner briefings are derived from it for different audiences. The interactive briefing bundles all views into a single navigable artifact.</p></div>
+  <div class="doc-grid">{cards}</div>
+</section>
+<section class="section">
+  <div class="notice"><strong>Suggested starting points:</strong> For council members preparing for the Community Infrastructure &amp; Strategic Growth Standing Committee meeting, start with the Decision-Support Brief. For planning staff drafting bylaw language, start with the Planner Briefing.</div>
+  <p class="source-note">Displayed statistics are drawn from the technical report and linked public records. This analysis is for informational purposes. Verify in-force bylaw text, HAF disbursement status, and named staff before client-facing publication.</p>
+</section>
+"""
+    return layout("sub", "Secondary Suites & STR", body)
+
+
 def write_page(path: Path, html_text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(html_text)
+    path.write_text(html_text, encoding="utf-8")
 
 
 def main() -> int:
@@ -783,7 +868,10 @@ def main() -> int:
     write_page(ROOT / "next-requests" / "index.html", next_requests_page(ctx))
     write_page(ROOT / "housing-labour" / "index.html", housing_labour_page(ctx))
     for report in EXTERNAL_REPORTS:
-        write_page(ROOT / report["folder"] / "index.html", external_report_page(report))
+        if report["folder"] == "secondary-suites-str":
+            write_page(ROOT / report["folder"] / "index.html", str_portal_page())
+        else:
+            write_page(ROOT / report["folder"] / "index.html", external_report_page(report))
     write_page(ROOT / "ticket-archive" / "index.html", ticket_archive_page())
     manifest = {
         "ticket_records": len(ctx["tickets"]),
